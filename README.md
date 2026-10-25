@@ -4,6 +4,8 @@ Phone home-screen gym plan for Sammy. Opening the site shows the current plan, p
 
 https://sammyennebt-collab.github.io/Gym-plan-winter-2026/
 
+Turn Pages on once before that link will load: **Settings → Pages → Build and deployment → Source: GitHub Actions**. Then re-run the latest "Deploy GitHub Pages" workflow. The address starts working after that run succeeds.
+
 ## Add to an iPhone
 
 1. Open the link in Safari.
