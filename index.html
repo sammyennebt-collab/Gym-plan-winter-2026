@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gym">
+<meta name="theme-color" content="#0e0e0e">
+<meta name="color-scheme" content="dark">
+
+<title>SAMMY &mdash; PHASE 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e0e;
+  --surface: #161616;
+  --surface2: #1e1e1e;
+  --border: #2a2a2a;
+  --accent: #b8f54a;
+  --red: #ff4444;
+  --orange: #ff8c00;
+  --green: #b8f54a;
+  --blue: #4ab8f5;
+  --text: #f0f0f0;
+  --text-dim: #888;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+.header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--accent);
+  padding: 18px 20px 14px;
+  text-align: center;
+}
+.header-title {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+.header-sub {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+.day-nav {
+  display: flex;
+  gap: 6px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+.day-btn {
+  flex: 1;
+  min-width: 52px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 8px 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  text-align: center;
+}
+.day-btn.active {
+  background: var(--accent);
+  color: #0e0e0e;
+  border-color: var(--accent);
+}
+.day-btn:hover:not(.active) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.day-panel {
+  display: none;
+  padding: 16px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.day-panel.active { display: block; }
+.day-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.day-label {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+.day-desc {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.superset-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.superset-label {
+  background: rgba(74,184,245,0.08);
+  padding: 5px 12px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--blue);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.exercise-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.superset-block .exercise-card {
+  border: none;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  margin: 0;
+}
+.superset-block .exercise-card:first-of-type {
+  border-top: none;
+}
+.ex-header {
+  padding: 11px 14px 8px;
+}
+.ex-name {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.ex-note {
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+.ex-sets-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 10px;
+}
+.sets-badge {
+  background: var(--accent);
+  color: #0e0e0e;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  text-transform: uppercase;
+}
+.reps-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+.ex-weight-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 14px 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.weight-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.weight-input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  width: 72px;
+  padding: 3px 7px;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.weight-input::-webkit-outer-spin-button,
+.weight-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.weight-input:focus { border-color: var(--accent); }
+.weight-unit {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+.weight-saved-tag {
+  font-size: 8px;
+  color: var(--green);
+  letter-spacing: 1px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  text-transform: uppercase;
+}
+.weight-saved-tag.show { opacity: 1; }
+.triset-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.triset-label {
+  background: rgba(255,140,0,0.08);
+  padding: 5px 12px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--orange);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.triset-body {
+  padding: 10px 14px 12px;
+}
+.triset-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+.triset-row:last-child { border-bottom: none; }
+.triset-ex {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  flex: 1;
+}
+.triset-reps {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* pwa-chrome */
+html { -webkit-text-size-adjust: 100%; color-scheme: dark; }
+.phase-switch {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  gap: 8px;
+  padding: calc(8px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 8px calc(12px + env(safe-area-inset-left));
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.phase-link {
+  flex: 1;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  text-decoration: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: var(--text-dim, var(--muted2));
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  line-height: 1.05;
+}
+.phase-link small {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+.phase-link.current {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #111;
+}
+@media (hover: hover) {
+  .phase-link:hover { border-color: var(--accent); color: var(--accent); }
+  .phase-link.current:hover { color: #111; }
+}
+.day-btn { min-height: 44px; line-height: 1.15; }
+.day-nav {
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
+}
+.day-panel {
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
+}
+button, a, .exercise-row, .set-dot { touch-action: manipulation; }
+/* /pwa-chrome */
+body { padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
+</style>
+</head>
+<body>
+<!-- phase-switch -->
+<nav class="phase-switch" aria-label="Training phase">
+  <span class="phase-link current" aria-current="page">Phase 4<small>Hypertrophy · now</small></span>
+  <a class="phase-link" href="phase-3.html">Phase 3<small>Recomp</small></a>
+</nav>
+<!-- /phase-switch -->
+
+<div class="header">
+  <div class="header-title">SAMMY &mdash; PHASE 4</div>
+  <div class="header-sub">RP Hypertrophy &middot; 6 Days &middot; MAV Volume &middot; Each Muscle 2&times; Per Week</div>
+</div>
+
+<div class="day-nav">
+  <button class="day-btn active" onclick="showDay('d1')">D1<br>UPPER A</button>
+  <button class="day-btn" onclick="showDay('d2')">D2<br>LOWER Q</button>
+  <button class="day-btn" onclick="showDay('d3')">D3<br>UPPER B</button>
+  <button class="day-btn" onclick="showDay('d4')">D4<br>LOWER H</button>
+  <button class="day-btn" onclick="showDay('d5')">D5<br>UPPER C</button>
+  <button class="day-btn" onclick="showDay('d6')">D6<br>ARMS</button>
+</div>
+
+<!-- D1 -->
+<div id="d1" class="day-panel active">
+  <div class="day-header">
+    <div class="day-label">Day 1 &mdash; Upper A</div>
+    <div class="day-desc">Strength Focus &middot; Heavy Compounds</div>
+  </div>
+
+  <div class="superset-block">
+    <div class="superset-label">&#9889; Superset A &mdash; Chest / Back</div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Barbell Flat Bench Press</div>
+        <div class="ex-note">Primary chest anchor &mdash; full ROM, controlled descent, drive through</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">6&ndash;8 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d1_bench" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Weighted / Assisted Pull-Up</div>
+        <div class="ex-note">Add weight if 8+ easy &mdash; full hang, chin over bar, no kipping</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">6&ndash;8 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d1_pullup" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="superset-block">
+    <div class="superset-label">&#9889; Superset B &mdash; Chest / Back</div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Incline DB Press</div>
+        <div class="ex-note">30&ndash;45 deg incline &mdash; full stretch at bottom, squeeze at top</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">8&ndash;10 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d1_inclinedb" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg each</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Chest-Supported Row</div>
+        <div class="ex-note">Neutral grip &mdash; elbows drive back past torso, full stretch at front</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">8&ndash;10 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d1_csrow" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Cable Lateral Raise</div>
+      <div class="ex-note">Low pulley &mdash; slight forward lean, arm slightly bent, constant tension</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">4 SETS</span>
+      <span class="reps-text">12&ndash;15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d1_lateral" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Face Pulls</div>
+      <div class="ex-note">Rope to forehead &mdash; elbows high, external rotation at top</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">15&ndash;20 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d1_facepull" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Cable Crossover</div>
+      <div class="ex-note">High pulley &mdash; slight forward lean, hands meet below sternum, squeeze</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">12&ndash;15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d1_crossover" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+</div>
+
+<!-- D2 -->
+<div id="d2" class="day-panel">
+  <div class="day-header">
+    <div class="day-label">Day 2 &mdash; Lower Quad</div>
+    <div class="day-desc">Quad Dominant &middot; High Volume Lower</div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Leg Press</div>
+      <div class="ex-note">Feet mid-plate &mdash; full depth, knees tracking over toes, controlled</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">4 SETS</span>
+      <span class="reps-text">8&ndash;10 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d2_legpress" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Hack Squat</div>
+      <div class="ex-note">Feet low on plate &mdash; deep ROM, 3-sec descent, explosive drive</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">10&ndash;12 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d2_hack" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Lying Hamstring Machine</div>
+      <div class="ex-note">Full stretch at bottom &mdash; 1-sec pause, explosive curl, peak squeeze</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">10&ndash;12 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d2_hamstring" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Hip Abduction Machine</div>
+      <div class="ex-note">Glute med &mdash; slow controlled reps, squeeze at top, no momentum</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">12&ndash;15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d2_hipabd" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Quad Extension</div>
+      <div class="ex-note">Full ROM &mdash; 2-sec peak hold, pump finisher</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d2_quadext" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Standing Calf Raise</div>
+      <div class="ex-note">Full stretch at bottom &mdash; 2-sec pause, drive to full contraction</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">4 SETS</span>
+      <span class="reps-text">10&ndash;12 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d2_calfstand" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Seated Calf Raise</div>
+      <div class="ex-note">Soleus focus &mdash; slow stretch, full contraction, higher reps</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d2_calfset" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+</div>
+
+<!-- D3 -->
+<div id="d3" class="day-panel">
+  <div class="day-header">
+    <div class="day-label">Day 3 &mdash; Upper B</div>
+    <div class="day-desc">Volume Day &middot; Moderate Load</div>
+  </div>
+
+  <div class="superset-block">
+    <div class="superset-label">&#9889; Superset A &mdash; Back / Shoulders</div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Lat Pulldown</div>
+        <div class="ex-note">Wide overhand grip &mdash; lean back slightly, pull bar to upper chest</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">8&ndash;10 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d3_latpull" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Machine Shoulder Press</div>
+        <div class="ex-note">Full ROM &mdash; drive to lockout, slow controlled descent</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">8&ndash;10 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d3_shpress" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="superset-block">
+    <div class="superset-label">&#9889; Superset B &mdash; Back / Chest</div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Chest-Supported Row</div>
+        <div class="ex-note">Neutral grip &mdash; full stretch at front, elbows past torso at back</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">10&ndash;12 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d3_csrow" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Cable Crossover</div>
+        <div class="ex-note">High pulley &mdash; squeeze hard at cross, full chest stretch at start</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">3 SETS</span>
+        <span class="reps-text">12&ndash;15 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d3_crossover" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="triset-card">
+    <div class="triset-label">&#9888; Delt Tri-Set &mdash; 4 Rounds &middot; No Rest Between Exercises</div>
+    <div class="triset-body">
+      <div class="triset-row">
+        <span class="triset-ex">Lateral Raise</span>
+        <span class="triset-reps">12 REPS</span>
+      </div>
+      <div class="triset-row">
+        <span class="triset-ex">Rear Delt Cable Fly</span>
+        <span class="triset-reps">12 REPS</span>
+      </div>
+      <div class="triset-row">
+        <span class="triset-ex">Face Pulls</span>
+        <span class="triset-reps">15 REPS</span>
+      </div>
+    </div>
+    <div class="ex-weight-row" style="margin: 0 14px 12px; padding-top: 8px; border-top: 1px solid var(--border);">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d3_triset" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg (lateral ref)</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Pull-Up</div>
+      <div class="ex-note">Bodyweight &mdash; full hang, chin over bar, no kipping, max reps</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">MAX REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">REPS</span>
+      <input class="weight-input" type="number" data-key="d3_pullup" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">last set</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+</div>
+
+<!-- D4 -->
+<div id="d4" class="day-panel">
+  <div class="day-header">
+    <div class="day-label">Day 4 &mdash; Lower Ham</div>
+    <div class="day-desc">Hamstring Dominant &middot; Posterior Chain</div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Lying Hamstring Machine</div>
+      <div class="ex-note">Full stretch at bottom &mdash; pause 1 sec, explosive curl, peak squeeze</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">4 SETS</span>
+      <span class="reps-text">8&ndash;10 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d4_hamstring" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Barbell Walking Lunge</div>
+      <div class="ex-note">Bar on upper back &mdash; full stride, knee 1cm from floor, drive through heel</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">10&ndash;12 REPS / LEG</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d4_lunge" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg (total bar)</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Leg Press</div>
+      <div class="ex-note">Feet high and wide &mdash; glute and ham bias, full depth</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">10&ndash;12 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d4_legpress" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Hip Abduction Machine</div>
+      <div class="ex-note">Glute med &mdash; controlled reps, squeeze at top, no bouncing</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">12&ndash;15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d4_hipabd" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Quad Extension</div>
+      <div class="ex-note">2-sec peak hold &mdash; finisher, full ROM, no momentum</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d4_quadext" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Seated Calf Raise</div>
+      <div class="ex-note">Soleus focus &mdash; slow stretch at bottom, full drive to contraction</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">4 SETS</span>
+      <span class="reps-text">15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d4_calf" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+</div>
+
+<!-- D5 -->
+<div id="d5" class="day-panel">
+  <div class="day-header">
+    <div class="day-label">Day 5 &mdash; Upper C</div>
+    <div class="day-desc">Volume + Pump &middot; High Density</div>
+  </div>
+
+  <div class="superset-block">
+    <div class="superset-label">&#9889; Superset A &mdash; Chest / Back</div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">DB Flat Press</div>
+        <div class="ex-note">Full stretch at bottom &mdash; explosive press, controlled descent</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">8&ndash;10 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d5_dbflat" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg each</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Chest-Supported Row</div>
+        <div class="ex-note">Neutral grip &mdash; full stretch at front, row to lower chest</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">10&ndash;12 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d5_csrow" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="superset-block">
+    <div class="superset-label">&#9889; Superset B &mdash; Chest / Back</div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Incline DB Press</div>
+        <div class="ex-note">30&ndash;45 deg &mdash; upper chest focus, controlled tempo, full ROM</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">3 SETS</span>
+        <span class="reps-text">10&ndash;12 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d5_inclinedb" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg each</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Lat Pulldown</div>
+        <div class="ex-note">Neutral / close grip &mdash; elbows to hips, peak lat squeeze at bottom</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">3 SETS</span>
+        <span class="reps-text">10&ndash;12 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d5_latpull" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Cable Crossover</div>
+      <div class="ex-note">High pulley &mdash; stretch at start, hard squeeze at cross, pump finisher</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">12&ndash;15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d5_crossover" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="triset-card">
+    <div class="triset-label">&#9888; Delt Tri-Set &mdash; 3 Rounds &middot; No Rest Between Exercises</div>
+    <div class="triset-body">
+      <div class="triset-row">
+        <span class="triset-ex">Lateral Raise</span>
+        <span class="triset-reps">12 REPS</span>
+      </div>
+      <div class="triset-row">
+        <span class="triset-ex">Rear Delt Cable Fly</span>
+        <span class="triset-reps">12 REPS</span>
+      </div>
+      <div class="triset-row">
+        <span class="triset-ex">Face Pulls</span>
+        <span class="triset-reps">15 REPS</span>
+      </div>
+    </div>
+    <div class="ex-weight-row" style="margin: 0 14px 12px; padding-top: 8px; border-top: 1px solid var(--border);">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d5_triset" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg (lateral ref)</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Assisted Pull-Up</div>
+      <div class="ex-note">Full hang to chin over bar &mdash; pump finisher, controlled descent</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">10&ndash;12 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">ASSIST</span>
+      <input class="weight-input" type="number" data-key="d5_pullup" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg assist</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+</div>
+
+<!-- D6 -->
+<div id="d6" class="day-panel">
+  <div class="day-header">
+    <div class="day-label">Day 6 &mdash; Arms + Delts</div>
+    <div class="day-desc">Direct Arm Volume &middot; Superset Pairs</div>
+  </div>
+
+  <div class="superset-block">
+    <div class="superset-label">&#9889; Superset A &mdash; Biceps / Triceps</div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">EZ-Bar Curl</div>
+        <div class="ex-note">EZ / neutral grip only &mdash; no supination, full stretch at bottom</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">8&ndash;10 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d6_ezcurl" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg (total bar)</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Cable Pushdown</div>
+        <div class="ex-note">Rope attachment &mdash; elbows fixed at sides, full extension, hard squeeze</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">10&ndash;12 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d6_pushdown" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="superset-block">
+    <div class="superset-label">&#9889; Superset B &mdash; Biceps / Triceps</div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">45&deg; Incline DB Curl</div>
+        <div class="ex-note">Dr. Mike stretch curl &mdash; max bicep stretch at bottom, slow 3-sec eccentric</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">10&ndash;12 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d6_inclinecurl" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg each</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+    <div class="exercise-card">
+      <div class="ex-header">
+        <div class="ex-name">Overhead Cable Tricep Extension</div>
+        <div class="ex-note">Long head stretch &mdash; elbows forward, full ROM overhead, squeeze at lockout</div>
+      </div>
+      <div class="ex-sets-row">
+        <span class="sets-badge">4 SETS</span>
+        <span class="reps-text">10&ndash;12 REPS</span>
+      </div>
+      <div class="ex-weight-row">
+        <span class="weight-label">KG</span>
+        <input class="weight-input" type="number" data-key="d6_overtricep" placeholder="0" oninput="saveWeight(this)">
+        <span class="weight-unit">kg</span>
+        <span class="weight-saved-tag">SAVED</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Hammer Curl</div>
+      <div class="ex-note">Neutral grip &mdash; brachialis and brachioradialis focus, no swinging</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">12&ndash;15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d6_hammer" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg each</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Cable Lateral Raise</div>
+      <div class="ex-note">Low pulley &mdash; constant tension, slight forward lean, slow controlled</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d6_lateral" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+
+  <div class="exercise-card">
+    <div class="ex-header">
+      <div class="ex-name">Rear Delt Cable Fly</div>
+      <div class="ex-note">Cable at head height &mdash; arms straight, squeeze rear delt at full extension</div>
+    </div>
+    <div class="ex-sets-row">
+      <span class="sets-badge">3 SETS</span>
+      <span class="reps-text">15 REPS</span>
+    </div>
+    <div class="ex-weight-row">
+      <span class="weight-label">KG</span>
+      <input class="weight-input" type="number" data-key="d6_reardelt" placeholder="0" oninput="saveWeight(this)">
+      <span class="weight-unit">kg</span>
+      <span class="weight-saved-tag">SAVED</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const WK = 'sammy_p4_weights';
+function getWeights() {
+  try { return JSON.parse(localStorage.getItem(WK) || '{}'); } catch { return {}; }
+}
+function saveWeight(input) {
+  const key = input.getAttribute('data-key');
+  const val = input.value;
+  const data = getWeights();
+  if (val) { data[key] = val; } else { delete data[key]; }
+  try { localStorage.setItem(WK, JSON.stringify(data)); } catch {}
+  const tag = input.parentElement.querySelector('.weight-saved-tag');
+  if (tag && val) {
+    tag.classList.add('show');
+    clearTimeout(tag._t);
+    tag._t = setTimeout(() => tag.classList.remove('show'), 1200);
+  }
+}
+function showDay(id) {
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx = ['d1','d2','d3','d4','d5','d6'].indexOf(id);
+  document.querySelectorAll('.day-btn')[idx].classList.add('active');
+}
+(function() {
+  const data = getWeights();
+  document.querySelectorAll('.weight-input').forEach(input => {
+    const key = input.getAttribute('data-key');
+    if (data[key]) input.value = data[key];
+  });
+})();
+</script>
+
+<!-- pwa-boot -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a');
+    if (!a || a.target === '_blank' || !a.href) return;
+    var url;
+    try { url = new URL(a.href, location.href); } catch (err) { return; }
+    if (url.origin !== location.origin) return;
+    if (window.navigator.standalone) {
+      e.preventDefault();
+      location.href = url.href;
+    }
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+})();
+</script>
+<!-- /pwa-boot -->
+
+</body>
+</html>
